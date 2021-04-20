@@ -1,4 +1,4 @@
-# jebation
+# Jebation
 
 Script to transform image or gif into rainbow gif.
 
