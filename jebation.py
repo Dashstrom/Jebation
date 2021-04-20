@@ -1,13 +1,13 @@
 from typing import List
 from PIL import Image, ImageSequence
 from math import cos, radians
+from traceback import print_exc
 
 import sys
 import numpy as np
-from traceback import print_exc
 
 
-def d(number: float) -> float:
+def rainbow_angle(number: float) -> float:
     """Sinusoidal function."""
     return abs(cos(radians(number)))
 
@@ -27,9 +27,9 @@ def rainbow_list(image: Image.Image) -> List[Image.Image]:
     colored_frames = []
     for i, (np_frame, info) in enumerate(np_frames):
         change_color = i * 180 / len(np_frames)
-        np_frame[..., 0] = np_frame[..., 0] * d(change_color + 45)
-        np_frame[..., 1] = np_frame[..., 1] * d(change_color + 90)
-        np_frame[..., 2] = np_frame[..., 2] * d(change_color)
+        np_frame[..., 0] = np_frame[..., 0] * rainbow_angle(change_color + 45)
+        np_frame[..., 1] = np_frame[..., 1] * rainbow_angle(change_color + 90)
+        np_frame[..., 2] = np_frame[..., 2] * rainbow_angle(change_color)
         np_frame[..., 3] = (np_frame[..., 3] > 130) * 255
         img = Image.fromarray(np_frame)
         img.info = info
@@ -38,7 +38,7 @@ def rainbow_list(image: Image.Image) -> List[Image.Image]:
 
 
 def rainbow(path: str, dest: str) -> None:
-    """MAke rainbow image of image at `path`."""
+    """Make rainbow image of image at `path`."""
     image = Image.open(path)
     frames = rainbow_list(image)
     frames[0].save(
